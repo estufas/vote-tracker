@@ -1,60 +1,91 @@
-
-//
-// var Photo = function(imgPath) {
-//   this.votes = 0;
-//   this.leftPic = leftPic;
-//   this.rightPic = rightPic;
-// }
-
-// Photo.prototype.voteTrack = function(){
-//   //when the pictture is clicked
-//   this.vote +=1;
-// };
-var photos = ['img/1.jpg','img/2.jpg','img/3.jpg', 'img/4.jpg', 'img/5.jpg', 'img/6.jpg', 'img/7.jpg', 'img/8.jpg', 'img/9.jpg', 'img/10.jpg', 'img/11.jpg','img/11.jpg','img/12.jpg', 'img/13.jpg', 'img/14.jpg' ]
-var Tracker = function(photos) {
-  //this.photos = [];
+$(document).ready(function(){
+var Photo = function(path) {
+  this.path = path;
+  this.votes = 0;
 };
 
-Tracker.prototype.getRandomPhotos = function(){
+var imgPath = "./img/";
+
+var photoAry = [];
+for (var i = 1; i < 15; i++) {
+  photoAry.push(new Photo(imgPath + i + ".jpg"));
+};
+console.dir(photoAry);
+
+Photo.prototype.getRandomPhotos = function(){
+
+  $('#lefty').empty();
+  $('#righty').empty();
+  $('#lefty').css("background", "");
+  $('#righty').css("background", "");
+  $('#lefty').css("border", "");
+  $('#righty').css("border", "");
+
 var lNumber = Math.floor((Math.random() * (14 -1)) + 1);
 var rNumber = Math.floor((Math.random() * (14 -1)) + 1);
 if (rNumber === lNumber){
     return this.getRandomPhotos()
-} else {
-  this.leftPic = photos[lNumber];
-  this.rightPic = photos[rNumber];
 }
 
-  var lefty = document.getElementById('lefty');
-  lefty.innerHTML = "<img src=" + photos[lNumber] + ">";
-  var righty = document.getElementById('righty');
-  righty.innerHTML = "<img src=" + photos[rNumber] + ">";
+  $('#lefty').append("<img src=" + photoAry[lNumber].path + ">");
+  $('#righty').append("<img src=" + photoAry[rNumber].path + ">");
   console.log(lefty);
 };
-Tracker.prototype.voting = function(){
 
+// function changeImg(imgDiv) {
+//   var img = '#' + imgDiv;
+//   $(img).empty();
+//   $(img).css("background", "");
+//   $(img).css("border", "");
+//
+//
+// var lNumber = Math.floor((Math.random() * (14 -1)) + 1);
+// var rNumber = Math.floor((Math.random() * (14 -1)) + 1);
+// if ( imgDiv === "righty") {
+//
+// } else {
+//   var x = $(img);
+//   console.log()
+// }
+// }
+//
+//
+//   $('#lefty').append("<img src=" + photoAry[lNumber].path + ">");
+//   $('#righty').append("<img src=" + photoAry[rNumber].path + ">");
+// }
+// changeImg("lefty");
+// changeImg("righty");
+
+function clickWinner() {
+  $('#lefty').click(function(e){
+    $('#lefty').css("background", "rgb(154, 8, 8)");
+    addVote(e);
+    });
+  $('#righty').click(function(e){
+    $('#righty').css("background", "rgb(154, 8, 8)");
+    addVote(e);
+  });
 };
 
-Tracker.prototype.declareWinner = function(){
+function addVote(e) {
+  console.dir(e.target.parentElement);
+  var targetValue = e.target.attributes[0].value;
+  for(var i = 0; i < photoAry.length; i++) {
+    if( targetValue === photoAry[i].path) {
+      photoAry[i].votes++;
+    }
+  }
+  // if (e.target.parentElement.id == "lefty") {
+  //   changeImg("righty");
+  // } else {
+  //   changeImg("lefty");
+  // }
+}
 
-};
-
-Tracker.prototype.declaring = function(){
-
-};
 
 
-Tracker.prototype.updateTally = function(){
-
-};
-
-Tracker.prototype.resetResults = function(){
-
-};
-
-Tracker.prototype.castVote = function(){
-
-};
-
-var tracker = new Tracker();
-tracker.getRandomPhotos();
+var photo = new Photo();
+photo.getRandomPhotos();
+clickWinner();
+addVote();
+});
