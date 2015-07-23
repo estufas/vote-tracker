@@ -1,0 +1,29 @@
+/** {
+  border: 1px solid red;
+}*/
+h1 {
+  text-align: center;
+}
+h2 {
+  text-align: center;
+}
+#container {
+  heigth: 60%;
+}
+#lefty {
+  float: left;
+}
+#righty {
+  float: right;
+}
+#button {
+  text-align: center;
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+#pic-box {
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+}
