@@ -63,7 +63,7 @@ if (rNumber === lNumber){
   this.lNumber = lNumber;
   this.rNumber = rNumber;
   console.log(photoAry[lNumber].votes);
-// tracker.renderChart();
+  tracker.renderChart();
 }
 
 Tracker.prototype.addVote = function(e) {
