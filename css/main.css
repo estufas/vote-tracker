@@ -19,11 +19,15 @@ h2 {
 #button {
   text-align: center;
   width: 50%;
-  margin-left: 25%;
-  margin-right: 25%;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 #pic-box {
   width: 60%;
   margin-left: 20%;
   margin-right: 20%;
+  height: 50%;
+}
+#myChart {
+
 }

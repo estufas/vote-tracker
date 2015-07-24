@@ -1,41 +1,25 @@
 
-  var photoAry = [
-    { name : 'img/1.jpg',
-    votes : 0 },
-    { name : 'img/2.jpg',
-    votes : 0 },
-    { name : 'img/3.jpg',
-    votes : 0 },
-    { name : 'img/4.jpg',
-    votes : 0 },
-    { name : 'img/5.jpg',
-    votes : 0 },
-    { name : 'img/6.jpg',
-    votes : 0 },
-    { name : 'img/7.jpg',
-    votes : 0 },
-    { name : 'img/8.jpg',
-    votes : 0 },
-    { name : 'img/9.jpg',
-    votes : 0 },
-    { name : 'img/10.jpg',
-    votes : 0 },
-    { name : 'img/11.jpg',
-    votes : 0 },
-    { name : 'img/12.jpg',
-    votes : 0 },
-    { name : 'img/13.jpg',
-    votes : 0 },
-    { name : 'img/14.jpg',
-    votes : 0 }
-  ];
-
-console.dir(photoAry);
-
-var Photo = function(path) {
-  this.path = path;
+var Photo = function(name) {
+  this.name = name;
   this.votes = 0;
 };
+
+var img1 = new Photo('img/1.jpg');
+var img2 = new Photo('img/2.jpg');
+var img3 = new Photo('img/3.jpg');
+var img4 = new Photo('img/4.jpg');
+var img5 = new Photo('img/5.jpg');
+var img6 = new Photo('img/6.jpg');
+var img7 = new Photo('img/7.jpg');
+var img8 = new Photo('img/8.jpg');
+var img9 = new Photo('img/9.jpg');
+var img10 = new Photo('img/10.jpg');
+var img11 = new Photo('img/11.jpg');
+var img12 = new Photo('img/12.jpg');
+var img13 = new Photo('img/13.jpg');
+var img14 = new Photo('img/14.jpg');
+
+var photoAry = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14]
 
 var Tracker = function() {
   this.lNumber = 0;
@@ -62,7 +46,8 @@ if (rNumber === lNumber){
   console.log(lefty);
   this.lNumber = lNumber;
   this.rNumber = rNumber;
-  console.log(photoAry[lNumber].votes);
+  console.log(photoAry);
+  tracker.loadLocalData();
   tracker.renderChart();
 }
 
@@ -71,13 +56,17 @@ Tracker.prototype.addVote = function(e) {
   var targetValue = e.target.attributes[0].value;
   for(var i = 0; i < photoAry.length; i++) {
     if( targetValue === photoAry[i].name) {
+      tracker.loadLocalData();
       photoAry[i].votes++;
+      tracker.saveLocalData();
       console.log(photoAry[i].votes);
     }
   }
 };
-
+// var myChart = null;
 Tracker.prototype.renderChart = function() {
+this.loadLocalData();
+console.log(photoAry[this.lNumber].votes);
 var barData = {
     labels : ['left cat - right cat'],
     datasets : [
@@ -93,29 +82,56 @@ var barData = {
       }
     ]
   }
+
 var myChart = document.getElementById('myChart').getContext("2d");
 new Chart(myChart).Bar(barData);
 };
 
+Tracker.prototype.saveLocalData = function() {
+  localStorage.setItem("photoAry", JSON.stringify(photoAry));
+  // localStorage.setItem("righty", JSON.stringify(photoAry));
+  console.log(photoAry);
+};
+
+//Load the local copy of the array
+Tracker.prototype.loadLocalData = function() {
+  console.log('hello-from-localStorage');
+  return JSON.parse(localStorage.getItem("photoAry"));
+};
+
 var tracker = new Tracker();
 tracker.getRandomPhotos();
+// tracker.saveLocalData();
+// tracker.loadLocalData();
 
 $(document).ready(function(){
+
+  // if (!localStorage.getItem('photoAry')) {
+  //   tracker.saveLocalData();
+  //   console.log('localstore');
+  // } else {
+  //   tracker.loadLocalData();
+  //   console.log('loadData')
+  // };
 
   $('#lefty').click(function(e){
     $('#lefty').css("background", "rgb(154, 8, 8)");
     tracker.addVote(e);
+    tracker.saveLocalData();
+    tracker.renderChart();
     console.log('click');
     });
   $('#righty').click(function(e){
     $('#righty').css("background", "rgb(154, 8, 8)");
     tracker.addVote(e);
+    tracker.saveLocalData();
+    tracker.renderChart();
     console.dir(photoAry)
     });
   $('button').click(function(){
-    tracker.getRandomPhotos();
+    tracker.loadLocalData();
     tracker.renderChart();
-    console.log('click-2');
+    tracker.getRandomPhotos();
+    // console.log('click-2');
   });
-
 });
