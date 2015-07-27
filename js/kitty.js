@@ -1,28 +1,5 @@
-
-var Photo = function(name) {
-  this.name = name;
-  this.votes = 0;
-};
-
-// var img1 = new Photo('img/1.jpg');
-// var img2 = new Photo('img/2.jpg');
-// var img3 = new Photo('img/3.jpg');
-// var img4 = new Photo('img/4.jpg');
-// var img5 = new Photo('img/5.jpg');
-// var img6 = new Photo('img/6.jpg');
-// var img7 = new Photo('img/7.jpg');
-// var img8 = new Photo('img/8.jpg');
-// var img9 = new Photo('img/9.jpg');
-// var img10 = new Photo('img/10.jpg');
-// var img11 = new Photo('img/11.jpg');
-// var img12 = new Photo('img/12.jpg');
-// var img13 = new Photo('img/13.jpg');
-// var img14 = new Photo('img/14.jpg');
-//
-// var photoAry = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14]
-
-var photoAry = [];
-
+$(document).ready(function() {
+var pics;
 $.ajax({
   url: 'https://api.imgur.com/3/album/DDoWy.json',
   method: 'GET',
@@ -31,12 +8,13 @@ $.ajax({
   }
 })
 .done(function(res) {
-  photoAry = res.data.images;
-  console.dir(photoAry);
-})
-.fail(function(err) {
-  console.log(err);
-});
+  pics = res.data.images
+  console.dir(pics);
+
+var Photo = function(name) {
+  this.name = name;
+  this.votes = 0;
+};
 
 var Tracker = function() {
   this.lNumber = 0;
@@ -44,6 +22,15 @@ var Tracker = function() {
 };
 
 console.dir(Tracker);
+
+var photoAry = [];
+
+Tracker.prototype.placeLinksInAry = function() {
+    for (var i=0; i < pics.length; i++) {
+      photoAry.push(new Photo(pics[i].link));
+      console.log('fuck my life')
+    }
+  };
 
 Tracker.prototype.getRandomPhotos = function() {
 
@@ -59,12 +46,12 @@ var rNumber = Math.floor((Math.random() * (14 -1)) + 1);
 if (rNumber === lNumber){
     return this.getRandomPhotos();
 }
-  $('#lefty').append("<img src=" + photoAry[lNumber].link + ">");
-  $('#righty').append("<img src=" + photoAry[rNumber].link + ">");
+  $('#lefty').append("<img src=" + photoAry[lNumber].name + ">");
+  $('#righty').append("<img src=" + "'" + photoAry[rNumber].name + "'" + ">");
   console.log(lefty);
   this.lNumber = lNumber;
   this.rNumber = rNumber;
-  console.log(photoAry);
+  console.log(photoAry[lNumber].name);
   tracker.loadLocalData();
   tracker.renderChart();
 };
@@ -81,7 +68,7 @@ Tracker.prototype.addVote = function(e) {
     }
   }
 };
-// var myChart = null;
+
 Tracker.prototype.renderChart = function() {
 this.loadLocalData();
 console.log(photoAry[this.lNumber].votes);
@@ -117,12 +104,13 @@ Tracker.prototype.loadLocalData = function() {
   return JSON.parse(localStorage.getItem("photoAry"));
 };
 
+
 var tracker = new Tracker();
+tracker.placeLinksInAry();
 tracker.getRandomPhotos();
 // tracker.saveLocalData();
 // tracker.loadLocalData();
 
-$(document).ready(function(){
 
   $('#lefty').click(function(e){
     $('#lefty').css("background", "rgb(154, 8, 8)");
@@ -144,4 +132,9 @@ $(document).ready(function(){
     tracker.getRandomPhotos();
     // console.log('click-2');
   });
+});
+})
+.fail(function(err) {
+  console.log(err);
+
 });
