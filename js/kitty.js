@@ -130,7 +130,7 @@ tracker.getRandomPhotos();
     tracker.loadLocalData();
     tracker.renderChart();
     tracker.getRandomPhotos();
-    // console.log('click-2');
+    console.log('click-2');
   });
 });
 })
